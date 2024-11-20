@@ -67,13 +67,6 @@ model Driver {
   updatedAt     DateTime      @updatedAt
 }
 
-enum CampaignStatus {
-  ativa
-  pausada
-  expirada
-  deletada
-}
-
 enum Permissions {
   configuracoes
   faqs

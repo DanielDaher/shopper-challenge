@@ -49,8 +49,3 @@ components:
           readOnly: true
           format: date-time
           example: '2024-01-01T12:00:00Z'
-        campaigns:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/CampaignSchema'

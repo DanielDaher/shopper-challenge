@@ -14,13 +14,4 @@ export const RegisterDto = Prisma.validator<Prisma.UserSelect>()({
   codeExpiresIn: true,
   createdAt: true,
   updatedAt: true,
-  campaigns: {
-    select: {
-      id: true,
-      title: true,
-      status: true,
-      startDate: true,
-      endDate: true,
-    },
-  },
 });
