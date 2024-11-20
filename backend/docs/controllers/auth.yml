@@ -1,0 +1,54 @@
+paths:
+  /auth/login/adm:
+    post:
+      summary: 'Rota utilizada para login'
+      tags:
+        - Gerencial - Autenticação
+      description: >
+        ## - Por se tratar de um desafio técnico, apenas o admin com as credenciais abaixo está cadastrado no banco de dados.
+
+        ## - Utilize estas credencias para logar como administrador.
+
+        ### - Lembrando que, neste projeto, o administrador consegue criar, editar e deletar categorias e campanhas. O usuário comum só consegue fazer um soft delete nas campanhas (e consegue apenas fazer um GET nas categorias).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInputAdminSchema'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginAdminSchema'
+
+  /auth/login:
+    post:
+      summary: 'Rota utilizada para login'
+      tags:
+        - User - Autenticação
+      description: >
+        ## - Como logar no swagger?
+
+        ### - Exceute esta requisição. Se email e senha estiverem corretos, receberá um TOKEN como resposta (email e senha mockados nesta requisição são válidos, basta clicar em 'try it out' e executar)
+        
+        ### - Copie o conteúdo deste token, SEM AS ASPAS.
+
+        ### - Vá ao topo da página do swagger e clique no cadeado 'Authorize', localizado no canto superior direito.
+
+        ### - Cole, no input, o token copiado. Clique no botão 'Authorize' e pronto, você está autenticado!
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginInputUserSchema'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserSchema'
