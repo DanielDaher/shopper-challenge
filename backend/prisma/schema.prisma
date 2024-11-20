@@ -50,6 +50,23 @@ model User {
   updatedAt     DateTime      @updatedAt
 }
 
+model Driver {
+  id            Int           @id @default(autoincrement())
+  role          AccountRole   @default(driver)
+  name          String        @db.VarChar(512)
+  status        AccountStatus @default(ativo)
+  description   String        @db.VarChar(512)
+  car           String        @db.VarChar(512)
+  review        String        @db.VarChar(512)
+  minKm         Int           @default(1)
+  tax           Float
+  imageUrl      String?       @db.Text
+  code          String?       @db.VarChar(32)
+  codeExpiresIn DateTime?     @db.DateTime(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
 enum CampaignStatus {
   ativa
   pausada
@@ -66,6 +83,7 @@ enum Permissions {
 enum AccountRole {
   admin
   user
+  driver
 }
 
 enum AccountStatus {
