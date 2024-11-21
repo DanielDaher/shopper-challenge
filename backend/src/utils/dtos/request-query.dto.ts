@@ -3,6 +3,7 @@ import { AccountStatus } from '@prisma/client';
 
 export type RequestQueryDto = z.output<typeof RequestQuery>;
 export const RequestQuery = z.object({
+  driver_id: z.coerce.number().positive().int().optional(),
   page: z.coerce.number().positive().int().optional(),
   size: z.coerce.number().positive().int().optional(),
   search: z.string().optional(),
