@@ -17,6 +17,7 @@ export default {
   TEXT_NOT_FOUND: 'Texto não encontrado na base de dados.',
 
   NO_RIDES_FOUND: 'Nenhum registro encontrado',
+  INVALID_DRIVER: 'Motorista inválido',
 
   FORBIDDEN: 'Sem permissão para acessar esse recurso.',
   INACTIVE: 'Sua conta foi suspensa.',
