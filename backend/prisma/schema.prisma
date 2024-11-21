@@ -48,6 +48,7 @@ model User {
   codeExpiresIn DateTime?     @db.DateTime(0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  rides         Ride[]
 }
 
 model Driver {
@@ -65,6 +66,20 @@ model Driver {
   codeExpiresIn DateTime?     @db.DateTime(0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  rides         Ride[]
+}
+
+model Ride {
+  id            Int           @id @default(autoincrement())
+  customerId    Int
+  driverId      Int
+  origin        String        @db.VarChar(512)
+  destination   String        @db.VarChar(512)
+  distance      String        @db.VarChar(512)
+  duration      String        @db.VarChar(512)
+  value         Float         @default(0.00)
+  driver        Driver        @relation(fields: [driverId], references: [id])
+  customer      User          @relation(fields: [customerId], references: [id])
 }
 
 enum Permissions {

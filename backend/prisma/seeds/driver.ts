@@ -1,7 +1,5 @@
 import { Prisma, PrismaClient, AccountRole, AccountStatus, UserType } from '@prisma/client';
-import PasswordHelper from '../../src/utils/helpers/password.helper'; // Assuming this is for password hashing
-
-// Sample driver data (modify as needed)
+import PasswordHelper from '../../src/utils/helpers/password.helper';
 const drivers: Prisma.DriverCreateInput[] = [
   {
     name: 'Homer Simpson',
@@ -35,5 +33,5 @@ export async function seedDrivers(prisma: PrismaClient): Promise<void> {
       data: driver,
     });
   }
-  console.log('Driver seeds created successfully.');
+  console.log('Driver seed OK.');
 }
