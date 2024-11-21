@@ -7,6 +7,8 @@ import PaginationHelper from '@helpers/pagination.helper';
 
 import { CreateRideDto } from './dtos/create-ride.dto';
 import { UpdateRideDto } from './dtos/update-ride.dto';
+import driverService from '@modules/driver/driver.service';
+import registerService from '@modules/register/register.service';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -29,9 +31,12 @@ class Service {
   }
 
   public async findRidesByCustomer(customerId: number, driverId?: number) {
-    // if (driverId) {
+    await registerService.findOne(customerId);
 
-    // }
+    if (driverId) {
+      await driverService.findOne(driverId);
+    }
+  
     const rides = await Repository.findRidesByCustomer(customerId, driverId);
 
     if (!rides) {
