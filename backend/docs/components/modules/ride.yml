@@ -1,0 +1,48 @@
+components:
+  schemas:
+    RideSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+          example: 1
+        customerId:
+          type: integer
+          required: true
+          example: 10
+        driverId:
+          type: integer
+          required: true
+          example: 5
+        origin:
+          type: string
+          required: true
+          example: 'Av. Paulista, São Paulo, SP'
+        destination:
+          type: string
+          required: true
+          example: 'Rua XV de Novembro, Curitiba, PR'
+        distance:
+          type: string
+          required: true
+          example: '450 km'
+        duration:
+          type: string
+          required: true
+          example: '5 horas e 30 minutos'
+        value:
+          type: number
+          format: float
+          default: 0.00
+          example: 300.50
+        driver:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/DriverSchema'
+            - type: object
+        customer:
+          readOnly: true
+          allOf:
+            - $ref: '#/components/schemas/RegisterSchema'
+            - type: object

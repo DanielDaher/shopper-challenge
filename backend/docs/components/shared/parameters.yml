@@ -1,6 +1,14 @@
 components:
   # Reusable path, query, header and cookie parameters
   parameters:
+    CustomerIdParameter:
+      in: path
+      name: customer_id
+      required: true
+      schema:
+        type: number
+        example: 1
+
     IdParameter:
       in: path
       name: id
