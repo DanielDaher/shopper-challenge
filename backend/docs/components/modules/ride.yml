@@ -46,3 +46,19 @@ components:
           allOf:
             - $ref: '#/components/schemas/RegisterSchema'
             - type: object
+    
+    EstimateRideSchema:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          required: true
+          example: 1
+        origin:
+          type: string
+          required: true
+          example: 'Colégio Nossa Senhora das Dores - Avenida Francisco Sales - Floresta, Belo Horizonte - MG, Brasil'
+        destination:
+          type: string
+          required: true
+          example: 'Colégio Batista - Rua Pte. Nova - Floresta, Belo Horizonte - MG, Brasil'
