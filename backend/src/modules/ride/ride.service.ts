@@ -9,6 +9,9 @@ import { CreateRideDto } from './dtos/create-ride.dto';
 import { UpdateRideDto } from './dtos/update-ride.dto';
 import driverService from '@modules/driver/driver.service';
 import registerService from '@modules/register/register.service';
+import googleApiRoutes from 'integrations/google-api-routes';
+import { EstimateRideDto } from './dtos/estimate-ride.dto';
+import { RouteRequest } from 'integrations/google-api-routes/compute-routes-body.interface';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -36,7 +39,7 @@ class Service {
     if (driverId) {
       await driverService.findOne(driverId);
     }
-  
+
     const rides = await Repository.findRidesByCustomer(customerId, driverId);
 
     if (!rides) {
@@ -44,6 +47,36 @@ class Service {
     }
     return rides;
   }
+
+  public async estimateRide(data: EstimateRideDto) {
+    const body: RouteRequest = {
+      origin: {
+        vehicleStopover: false,
+        sideOfRoad: false,
+        address: data.origin,
+      },
+      destination: {
+        vehicleStopover: false,
+        sideOfRoad: false,
+        address: data.destination,
+      },
+      travelMode: 'DRIVE',
+      routingPreference: 'TRAFFIC_UNAWARE',
+      polylineQuality: 'high_quality',
+      computeAlternativeRoutes: false,
+      routeModifiers: {
+        avoidTolls: false,
+        avoidHighways: false,
+        avoidFerries: false,
+        avoidIndoor: false,
+      },
+    };
+
+    const computedRoutes = await googleApiRoutes.computeRoutes(body);
+    return computedRoutes;
+  }
+
+  // public async calculatePrice(driverId: number, ) {}
 
   public async createOne(data: CreateRideDto) {
     return await Repository.createOne(data);

@@ -26,6 +26,11 @@ class Controller {
     res.status(200).json(result);
   }
 
+  public async estimateRide(req: Request, res: Response) {
+    const result = await Service.estimateRide(req.body);
+    res.status(201).json(result);
+  }
+
   public async createOne(req: Request, res: Response) {
     const result = await Service.createOne(req.body);
     res.status(201).json(result);

@@ -21,8 +21,8 @@ router
 router
 .route('/estimate')
 .post(
-  Validator.createOne,
-  Controller.createOne,
+  // Validator.createOne,
+  Controller.estimateRide,
 );
 
 router
@@ -40,6 +40,6 @@ router
 )
 .get(
   Controller.findRidesByCustomer,
-)
+);
 
 export default router;

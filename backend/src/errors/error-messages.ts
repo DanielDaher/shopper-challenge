@@ -19,6 +19,8 @@ export default {
   NO_RIDES_FOUND: 'Nenhum registro encontrado',
   INVALID_DRIVER: 'Motorista inválido',
 
+  INTEGRATION_ERROR: 'Erro na integração',
+
   FORBIDDEN: 'Sem permissão para acessar esse recurso.',
   INACTIVE: 'Sua conta foi suspensa.',
   PENDING: 'Sua conta ainda não foi aprovada. Aguarde.',
