@@ -9,7 +9,16 @@ class Repository {
   constructor(private readonly repository = DataSource.ride) {}
 
   public findAll(size: number, page: number, search?: string) {
-    const where: Prisma.RideWhereInput = {};
+    const where: Prisma.RideWhereInput = {
+      AND: [
+        { OR:
+          [
+            { origin: { contains: search } },
+            { destination: { contains: search } },
+          ],
+        },
+      ],
+    };
 
     return DataSource.$transaction([
       this.repository.findMany({
@@ -23,7 +32,16 @@ class Repository {
   }
 
   public findAllNoPagination(search?: string) {
-    const where: Prisma.RideWhereInput = {};
+    const where: Prisma.RideWhereInput = {
+      AND: [
+        { OR:
+          [
+            { origin: { contains: search } },
+            { destination: { contains: search } },
+          ],
+        },
+      ],
+    };
 
     return this.repository.findMany({
       where,

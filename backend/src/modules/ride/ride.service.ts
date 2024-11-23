@@ -12,6 +12,9 @@ import registerService from '@modules/register/register.service';
 import googleApiRoutes from 'integrations/google-api-routes';
 import { EstimateRideDto } from './dtos/estimate-ride.dto';
 import { RouteRequest } from 'integrations/google-api-routes/compute-routes-body.interface';
+import { EstimateRideResponse } from './interfaces/estimate-ride-response.interface';
+import driverRepository from '@modules/driver/driver.repository';
+import { AvailableDriverDtoType } from '@modules/driver/dtos/available-driver.dto';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -73,9 +76,31 @@ class Service {
     };
 
     const computedRoutes = await googleApiRoutes.computeRoutes(body);
-    return computedRoutes;
+    const distance = +computedRoutes.routes[0].localizedValues.distance.text;
+    const duration = computedRoutes.routes[0].localizedValues.duration.text;
+    const availableDrivers = await this.findAvailableDrivers(distance);
+
+    const fullResponse: EstimateRideResponse = {
+      origin: {
+        latitude: computedRoutes.routes[0].viewport.low.latitude,
+        longitude:computedRoutes.routes[0].viewport.low.longitude,
+      },
+      destination: {
+        latitude: computedRoutes.routes[0].viewport.high.latitude,
+        longitude:computedRoutes.routes[0].viewport.high.longitude,
+      },
+      distance,
+      duration,
+      options: availableDrivers, // o problema aqui está no campo reviews/review. Talvez eu tenha que transformar num json lá no schema prisma
+      routeResponse: computedRoutes,
+    };
+    return fullResponse;
   }
 
+  public async findAvailableDrivers(distance: number): Promise<AvailableDriverDtoType[]> {
+    const drivers = await driverRepository.findAvailableDrivers(distance);
+    return drivers;
+  }
   // public async calculatePrice(driverId: number, ) {}
 
   public async createOne(data: CreateRideDto) {

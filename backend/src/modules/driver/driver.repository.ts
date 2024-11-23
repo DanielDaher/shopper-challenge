@@ -37,6 +37,18 @@ class Repository {
     });
   }
 
+  public findAvailableDrivers(distance: number) {
+    const where: Prisma.DriverWhereInput = {
+      minKm: { gte: distance },
+      status: 'ativo',
+    };
+
+    return this.repository.findMany({
+      where,
+      select: DriverDto,
+    });
+  }
+
   public createOne(data: Prisma.DriverCreateInput) {
     return this.repository.create({
       data,
