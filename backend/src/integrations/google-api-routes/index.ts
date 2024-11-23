@@ -2,9 +2,10 @@ import axios from 'axios';
 import AppException from '@errors/app-exception';
 import errorMessages from '@errors/error-messages';
 import { RouteRequest } from './compute-routes-body.interface';
+import { ComputeRouteResponse } from './compute-routes-response.interface';
 
 class GoogleApiRoutesIndex {
-  public async computeRoutes(data: RouteRequest) {
+  public async computeRoutes(data: RouteRequest): Promise<ComputeRouteResponse> {
     const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
     if (!GOOGLE_API_KEY) throw new AppException(400, errorMessages.FORBIDDEN);
