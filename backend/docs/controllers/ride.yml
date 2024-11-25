@@ -23,17 +23,15 @@ paths:
       summary: 'Rota utilizada para cadastrar uma corrida'
       tags:
         - Gerencial - Corridas
-      security:
-        - BearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RideSchema'
+              $ref: '#/components/schemas/ConfirmRideSchema'
       responses:
-        '201':
-          description: 'Created'
+        '200':
+          description: 'Operação realizada com sucesso'
           content:
             application/json:
               schema:
@@ -42,12 +40,11 @@ paths:
   /ride/{customer_id}:
     parameters:
       - $ref: '#/components/parameters/CustomerIdParameter'
+      - $ref: '#/components/parameters/DriverIdParameter'
     get:
       summary: 'Rota utilizada para exibir uma corrida'
       tags:
         - Gerencial - Corridas
-      security:
-        - BearerAuth: []
       responses:
         '200':
           description: 'OK'

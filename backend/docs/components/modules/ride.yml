@@ -24,9 +24,9 @@ components:
           required: true
           example: 'Rua XV de Novembro, Curitiba, PR'
         distance:
-          type: string
+          type: integer
           required: true
-          example: '450 km'
+          example: '4500'
         duration:
           type: string
           required: true
@@ -46,6 +46,37 @@ components:
           allOf:
             - $ref: '#/components/schemas/RegisterSchema'
             - type: object
+    
+    ConfirmRideSchema:
+      type: object
+      properties:
+        customerId:
+          type: integer
+          example: 1
+        origin:
+          type: string
+          example: 'Colégio Nossa Senhora das Dores - Avenida Francisco Sales - Floresta, Belo Horizonte - MG, Brasil'
+        destination:
+          type: string
+          example: 'Colégio Batista - Rua Pte. Nova - Floresta, Belo Horizonte - MG, Brasil'
+        distance:
+          type: number
+          example: 10
+        duration:
+          type: string
+          example: '13 minutos'
+        driver:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            name:
+              type: string
+              example: 'James Bond'
+        value:
+          type: number
+          example: 35.50
     
     EstimateRideSchema:
       type: object
