@@ -8,7 +8,15 @@ class Repository {
   constructor(private readonly repository = DataSource.driver) {}
 
   public findAll(size: number, page: number, search?: string) {
-    const where: Prisma.DriverWhereInput = {};
+    const where: Prisma.DriverWhereInput = {
+      AND: [
+        { OR:
+          [
+            { name: { contains: search } },
+          ],
+        },
+      ],
+    };
 
     return DataSource.$transaction([
       this.repository.findMany({
@@ -22,7 +30,15 @@ class Repository {
   }
 
   public findAllNoPagination(search?: string) {
-    const where: Prisma.DriverWhereInput = {};
+    const where: Prisma.DriverWhereInput = {
+      AND: [
+        { OR:
+          [
+            { name: { contains: search } },
+          ],
+        },
+      ],
+    };
 
     return this.repository.findMany({
       where,
@@ -39,7 +55,7 @@ class Repository {
 
   public findAvailableDrivers(distance: number) {
     const where: Prisma.DriverWhereInput = {
-      minKm: { gte: distance },
+      minDistanceInMeters: { lte: distance },
       status: 'ativo',
     };
 

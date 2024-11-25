@@ -7,7 +7,7 @@ export const DriverDto = Prisma.validator<Prisma.DriverSelect>()({
   status: true,
   description: true,
   vehicle: true,
-  minKm: true,
+  minDistanceInMeters: true,
   value: true,
   imageUrl: true,
   code: true,

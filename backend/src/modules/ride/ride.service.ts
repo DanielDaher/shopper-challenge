@@ -15,6 +15,7 @@ import { RouteRequest } from 'integrations/google-api-routes/compute-routes-body
 import { EstimateRideResponse } from './interfaces/estimate-ride-response.interface';
 import driverRepository from '@modules/driver/driver.repository';
 import { AvailableDriverDtoType } from '@modules/driver/dtos/available-driver.dto';
+import { ComputeRouteResponse } from 'integrations/google-api-routes/compute-routes-response.interface';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -52,7 +53,27 @@ class Service {
   }
 
   public async estimateRide(data: EstimateRideDto) {
-    const body: RouteRequest = {
+    const body: RouteRequest = this.formatBodyToEstimateRideRequest(data);
+    const computedRoutes = await googleApiRoutes.computeRoutes(body);
+
+    const distance = +computedRoutes.routes[0].distanceMeters;
+    const availableDrivers = await this.findAvailableDrivers(distance);
+
+    const fullResponse: EstimateRideResponse = this.formatResponseToEstimateRideRequest(
+      computedRoutes,
+      availableDrivers,
+    );
+
+    return fullResponse;
+  }
+
+  public async findAvailableDrivers(distance: number): Promise<AvailableDriverDtoType[]> {
+    const drivers = await driverRepository.findAvailableDrivers(distance);
+    return drivers;
+  }
+
+  public formatBodyToEstimateRideRequest(data: EstimateRideDto): RouteRequest {
+    return {
       origin: {
         vehicleStopover: false,
         sideOfRoad: false,
@@ -74,11 +95,17 @@ class Service {
         avoidIndoor: false,
       },
     };
+  }
 
-    const computedRoutes = await googleApiRoutes.computeRoutes(body);
-    const distance = +computedRoutes.routes[0].localizedValues.distance.text;
+  public formatResponseToEstimateRideRequest(
+    computedRoutes: ComputeRouteResponse,
+    drivers: AvailableDriverDtoType[],
+  ): EstimateRideResponse {
+
+    const distance = +computedRoutes.routes[0].distanceMeters;
     const duration = computedRoutes.routes[0].localizedValues.duration.text;
-    const availableDrivers = await this.findAvailableDrivers(distance);
+
+    const formattedDrivers = drivers.map((driver) => this.formatDriverFields(driver, distance));
 
     const fullResponse: EstimateRideResponse = {
       origin: {
@@ -91,17 +118,30 @@ class Service {
       },
       distance,
       duration,
-      options: availableDrivers, // o problema aqui está no campo reviews/review. Talvez eu tenha que transformar num json lá no schema prisma
+      options: formattedDrivers,
       routeResponse: computedRoutes,
     };
+
     return fullResponse;
   }
 
-  public async findAvailableDrivers(distance: number): Promise<AvailableDriverDtoType[]> {
-    const drivers = await driverRepository.findAvailableDrivers(distance);
-    return drivers;
+  public formatDriverFields(driver: AvailableDriverDtoType, distance: number) {
+    const { id, name, description, vehicle, value } = driver;
+
+    const totalValue = this.calculateTotalPrice(value, distance);
+    const review = {
+      rating: driver.reviews[0].rating,
+      comment: driver.reviews[0].comment,
+    };
+
+    return { id, name, description, vehicle, review, value: totalValue };
   }
-  // public async calculatePrice(driverId: number, ) {}
+
+  public calculateTotalPrice(driverValue: number, distanceInMeters: number) {
+    const distanceInKilometers = distanceInMeters / 1000;
+    const totalValue = driverValue * distanceInKilometers;
+    return totalValue;
+  }
 
   public async createOne(data: CreateRideDto) {
     return await Repository.createOne(data);

@@ -25,7 +25,6 @@ class GoogleApiRoutesIndex {
 
     try {
       const result = await axios(options);
-      console.log('result: ', result.data.routes[0].distanceMeters);
       return result.data;
     } catch (error: any) {
       console.log('data: ', data);

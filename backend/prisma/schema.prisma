@@ -59,7 +59,7 @@ model Driver {
   status        AccountStatus @default(ativo)
   description   String        @db.VarChar(512)
   vehicle       String        @db.VarChar(512)
-  minKm         Int           @default(1)
+  minDistanceInMeters         Int           @default(1000)
   value         Float
   imageUrl      String?       @db.Text
   code          String?       @db.VarChar(32)
