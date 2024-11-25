@@ -18,6 +18,7 @@ export default {
 
   NO_RIDES_FOUND: 'Nenhum registro encontrado',
   INVALID_DRIVER: 'Motorista inválido',
+  INVALID_DISTANCE_DRIVER: 'Quilometragem inválida para o motorista',
 
   INTEGRATION_ERROR: 'Erro na integração',
 

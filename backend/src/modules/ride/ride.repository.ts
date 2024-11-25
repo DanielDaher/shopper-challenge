@@ -4,6 +4,8 @@ import DataSource from '@database/data-source';
 import { Prisma } from '@prisma/client';
 import { RideDto } from './dtos/ride.dto';
 import { CreateRideDto } from './dtos/create-ride.dto';
+import { UpdateRideDto } from './dtos/update-ride.dto';
+import { FindRideByCostumerDto } from './dtos/find-ride-by-costumer.dto';
 
 class Repository {
   constructor(private readonly repository = DataSource.ride) {}
@@ -61,22 +63,36 @@ class Repository {
 
     return this.repository.findMany({
       where,
-      select: RideDto,
+      select: FindRideByCostumerDto,
     });
   }
 
-  public createOne(data: CreateRideDto) {
-    return this.repository.create({
-      data,
-      select: RideDto,
+  public async createOne(data: CreateRideDto) {
+    const { driver, ...rideData } = data;
+
+    return await DataSource.$transaction( async( trx ) => {
+      return await trx.ride.create({
+        data: {
+          ...rideData,
+          driver: { connect: { id: driver.id } },
+        },
+        select: RideDto,
+      });
     });
   }
 
-  public updateOne(id: number, data: Prisma.RideUpdateInput) {
-    return this.repository.update({
-      where: { id },
-      data,
-      select: RideDto,
+  public async updateOne(id: number, data: UpdateRideDto) {
+    const { driver, ...rideData } = data;
+
+    return await DataSource.$transaction( async( trx ) => {
+      return await trx.ride.update({
+        where: { id },
+        data: {
+          ...rideData,
+          driver: driver ? { connect: { id: driver.id } } : undefined,
+        },
+        select: RideDto,
+      });
     });
   }
 

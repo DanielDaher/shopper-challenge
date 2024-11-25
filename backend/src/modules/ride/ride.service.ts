@@ -8,7 +8,6 @@ import PaginationHelper from '@helpers/pagination.helper';
 import { CreateRideDto } from './dtos/create-ride.dto';
 import { UpdateRideDto } from './dtos/update-ride.dto';
 import driverService from '@modules/driver/driver.service';
-import registerService from '@modules/register/register.service';
 import googleApiRoutes from 'integrations/google-api-routes';
 import { EstimateRideDto } from './dtos/estimate-ride.dto';
 import { RouteRequest } from 'integrations/google-api-routes/compute-routes-body.interface';
@@ -38,18 +37,17 @@ class Service {
   }
 
   public async findRidesByCustomer(customerId: number, driverId?: number) {
-    await registerService.findOne(customerId);
-
     if (driverId) {
       await driverService.findOne(driverId);
     }
 
     const rides = await Repository.findRidesByCustomer(customerId, driverId);
 
-    if (!rides) {
+    if (!rides || !rides.length) {
       throw new AppException(404, ErrorMessages.NO_RIDES_FOUND);
     }
-    return rides;
+    // eslint-disable-next-line camelcase
+    return { customer_id: customerId, rides };
   }
 
   public async estimateRide(data: EstimateRideDto) {
@@ -143,11 +141,29 @@ class Service {
     return totalValue;
   }
 
+  public validateDriverMinDistance(driverMinDistance: number, rideDistance: number) {
+    if (driverMinDistance > rideDistance) {
+      throw new AppException(406, ErrorMessages.USER_NOT_FOUND);
+    }
+  }
+
   public async createOne(data: CreateRideDto) {
+    const driver = await driverService.findOne(data.driver.id);
+    this.validateDriverMinDistance(driver.minDistanceInMeters, data.distance);
+
     return await Repository.createOne(data);
   }
 
   public async updateOne(id: number, data: UpdateRideDto) {
+    if (data.driver && data.driver.id) {
+      const driver = await driverService.findOne(data.driver.id);
+
+      if (data.distance) {
+        this.validateDriverMinDistance(driver.minDistanceInMeters, data.distance);
+      }
+
+    }
+
     const ride = await this.findOne(id);
 
     return await Repository.updateOne(ride.id, data);

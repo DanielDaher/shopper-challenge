@@ -21,7 +21,7 @@ router
 router
 .route('/estimate')
 .post(
-  // Validator.createOne,
+  Validator.estimateRide,
   Controller.estimateRide,
 );
 
@@ -35,7 +35,7 @@ router
 router
 .route('/:customer_id')
 .all(
-  Validator.pathParams,
+  Validator.customerPathParams,
   Validator.queryParams,
 )
 .get(
