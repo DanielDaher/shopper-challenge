@@ -1,7 +1,7 @@
 services:
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     command: bash -c "npm run prisma:migration && npm run prisma:seed && npm start"
     container_name: app_shopper_challenge_backend
@@ -10,24 +10,24 @@ services:
         condition:
           service_healthy
     env_file:
+      - ./backend/.env
       - .env
     ports:
-      - "${PORT}:${PORT}"
+      - "8080:8080"
     restart: always
 
   app_mysql:
     image: mysql:8.0
     container_name: mysql_shopper_challenge_backend
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE_NAME}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      MYSQL_TCP_PORT: ${DB_PORT}
+      MYSQL_DATABASE: root
+      MYSQL_ROOT_PASSWORD: abc12345678
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       timeout: 5s
       retries: 15
     ports:
-      - "${DB_PORT}:3306"
+      - "3306:3306"
     restart: always
     volumes:
       - app_volume:/var/lib/mysql
