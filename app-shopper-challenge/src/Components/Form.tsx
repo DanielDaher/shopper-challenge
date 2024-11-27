@@ -14,15 +14,18 @@ type FormData = z.infer<typeof formSchema>;
 
 interface FormProps {
   setEstimatedRide: (value: any) => void;
+  setIsLoading: (value: boolean) => void
 }
 
 const Form: React.FC<FormProps> = (props) => {
-  const { setEstimatedRide } = props;
+  const { setEstimatedRide, setIsLoading } = props;
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
   const submitForm: SubmitHandler<FormData> = async (data) => {
+    setIsLoading(true);
+
     const formattedData = {
       ...data,
       customerId: +data.customerId,
@@ -32,8 +35,11 @@ const Form: React.FC<FormProps> = (props) => {
     const sucessfulResponse = 201;
 
     if (response.status === sucessfulResponse) {
+      setIsLoading(false);
       setEstimatedRide(response.data);
     }
+    
+    setIsLoading(false);
   };
 
   return (
