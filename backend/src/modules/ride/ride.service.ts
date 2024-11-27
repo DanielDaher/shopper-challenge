@@ -15,6 +15,7 @@ import { EstimateRideResponse } from './interfaces/estimate-ride-response.interf
 import driverRepository from '@modules/driver/driver.repository';
 import { AvailableDriverDtoType } from '@modules/driver/dtos/available-driver.dto';
 import { ComputeRouteResponse } from 'integrations/google-api-routes/compute-routes-response.interface';
+import { Coordinates } from 'integrations/google-api-routes/get-coordinates-response.interface';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -52,6 +53,8 @@ class Service {
 
   public async estimateRide(data: EstimateRideDto) {
     const body: RouteRequest = this.formatBodyToEstimateRideRequest(data);
+    const originCoordinates = await googleApiRoutes.getCoordinates(data.origin);
+    const destinationCoordinates = await googleApiRoutes.getCoordinates(data.destination);
     const computedRoutes = await googleApiRoutes.computeRoutes(body);
 
     const distance = +computedRoutes.routes[0].distanceMeters;
@@ -60,6 +63,8 @@ class Service {
     const fullResponse: EstimateRideResponse = this.formatResponseToEstimateRideRequest(
       computedRoutes,
       availableDrivers,
+      originCoordinates,
+      destinationCoordinates,
     );
 
     return fullResponse;
@@ -98,6 +103,8 @@ class Service {
   public formatResponseToEstimateRideRequest(
     computedRoutes: ComputeRouteResponse,
     drivers: AvailableDriverDtoType[],
+    originCoordinates: Coordinates,
+    destinationCoordinates: Coordinates,
   ): EstimateRideResponse {
 
     const distance = +computedRoutes.routes[0].distanceMeters;
@@ -107,12 +114,12 @@ class Service {
 
     const fullResponse: EstimateRideResponse = {
       origin: {
-        latitude: computedRoutes.routes[0].viewport.low.latitude,
-        longitude:computedRoutes.routes[0].viewport.low.longitude,
+        latitude: originCoordinates.lat || computedRoutes.routes[0].viewport.low.latitude,
+        longitude:originCoordinates.lng || computedRoutes.routes[0].viewport.low.longitude,
       },
       destination: {
-        latitude: computedRoutes.routes[0].viewport.high.latitude,
-        longitude:computedRoutes.routes[0].viewport.high.longitude,
+        latitude: destinationCoordinates.lat || computedRoutes.routes[0].viewport.high.latitude,
+        longitude: destinationCoordinates.lng || computedRoutes.routes[0].viewport.high.longitude,
       },
       distance,
       duration,

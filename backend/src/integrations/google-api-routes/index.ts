@@ -3,6 +3,7 @@ import AppException from '@errors/app-exception';
 import errorMessages from '@errors/error-messages';
 import { RouteRequest } from './compute-routes-body.interface';
 import { ComputeRouteResponse } from './compute-routes-response.interface';
+import { Coordinates } from './get-coordinates-response.interface';
 
 class GoogleApiRoutesIndex {
   public async computeRoutes(data: RouteRequest): Promise<ComputeRouteResponse> {
@@ -29,6 +30,25 @@ class GoogleApiRoutesIndex {
     } catch (error: any) {
       console.log('data: ', data);
       console.error(error.response.data);
+      throw new AppException(400, errorMessages.INTEGRATION_ERROR);
+    }
+  }
+
+  public async getCoordinates(address: string): Promise<Coordinates> {
+    const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+
+    try {
+      const response = await axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        params: {
+          address: address,
+          key: GOOGLE_API_KEY,
+        },
+      });
+
+      const { lat, lng } = response.data.results[0].geometry.location;
+      return { lat, lng };
+    } catch (error) {
+      console.error('Erro ao buscar coordenadas:', error);
       throw new AppException(400, errorMessages.INTEGRATION_ERROR);
     }
   }
