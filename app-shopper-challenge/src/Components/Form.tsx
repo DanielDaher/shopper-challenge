@@ -1,7 +1,8 @@
-import React from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
+import api from '../API';
+import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
 const formSchema = z.object({
   customerId: z.string().min(1, 'O ID do usuário é obrigatório'),
@@ -11,13 +12,28 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const Form: React.FC = () => {
+interface FormProps {
+  setEstimatedRide: (value: any) => void;
+}
+
+const Form: React.FC<FormProps> = (props) => {
+  const { setEstimatedRide } = props;
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
 
-  const submitForm: SubmitHandler<FormData> = (data) => {
-    console.log('Dados enviados:', data);
+  const submitForm: SubmitHandler<FormData> = async (data) => {
+    const formattedData = {
+      ...data,
+      customerId: +data.customerId,
+    };
+
+    const response = await api.post('/ride/estimate', formattedData);
+    const sucessfulResponse = 201;
+
+    if (response.status === sucessfulResponse) {
+      setEstimatedRide(response.data);
+    }
   };
 
   return (
