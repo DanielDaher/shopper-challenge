@@ -17,5 +17,8 @@ router.use('/driver', DriverRoutes);
 router.use('/registers', RegisterRoutes);
 router.use('/ride', RideRoutes);
 router.use('/upload-file', UploadFileRoutes);
+router.get('/api-key', (req, res) => {
+  res.status(200).json({ apiKey: process.env.GOOGLE_API_KEY });
+});
 
 export default router;
