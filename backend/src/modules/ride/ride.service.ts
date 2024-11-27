@@ -150,7 +150,7 @@ class Service {
 
   public validateDriverMinDistance(driverMinDistance: number, rideDistance: number) {
     if (driverMinDistance > rideDistance) {
-      throw new AppException(406, ErrorMessages.USER_NOT_FOUND);
+      throw new AppException(406, ErrorMessages.INVALID_DISTANCE_DRIVER);
     }
   }
 

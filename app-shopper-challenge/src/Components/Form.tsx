@@ -14,11 +14,14 @@ type FormData = z.infer<typeof formSchema>;
 
 interface FormProps {
   setEstimatedRide: (value: any) => void;
-  setIsLoading: (value: boolean) => void
+  setIsLoading: (value: boolean) => void;
+  setCustomerId: (value: number) => void;
+  setOriginAddress: (value: string) => void;
+  setDestinationAddress: (value: string) => void;
 }
 
 const Form: React.FC<FormProps> = (props) => {
-  const { setEstimatedRide, setIsLoading } = props;
+  const { setEstimatedRide, setIsLoading, setCustomerId, setOriginAddress, setDestinationAddress } = props;
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(formSchema),
   });
@@ -30,6 +33,10 @@ const Form: React.FC<FormProps> = (props) => {
       ...data,
       customerId: +data.customerId,
     };
+
+    setCustomerId(+data.customerId);
+    setOriginAddress(data.origin);
+    setDestinationAddress(data.destination);
 
     const response = await api.post('/ride/estimate', formattedData);
     const sucessfulResponse = 201;

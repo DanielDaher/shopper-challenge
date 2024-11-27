@@ -3,9 +3,10 @@ import { EstimateRide } from '../interfaces/estimate.ride.interface';
 
 interface AvailableDriversProps {
   drivers: EstimateRide["options"];
+  setDriverId: (id: number) => void;
 }
 
-const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers }) => {
+const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers, setDriverId }) => {
   const listClasses = "space-y-4";
   const textClasses = "text-gray-600 mt-2";
   const noDriversClasses = "text-gray-500";
@@ -14,6 +15,10 @@ const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers }) => {
   const headerClasses = "text-3xl font-semibold text-gray-800 mb-6";
   const containerClasses = "p-6 px-20 ml-5 text-center bg-white rounded-lg shadow-md max-w-4xl mx-auto";
   const itemClasses = "p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200";
+
+  const confirmRide = (driverId: number) => {
+    setDriverId(driverId);
+  };
 
   const showDriverInfo = (
     keyValue: number,
@@ -55,6 +60,7 @@ const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers }) => {
                     {
                       driverDetails.map((detail, idx) => showDriverInfo(idx, detail.label, detail.value, detail.isValueField))
                     }
+                    <button onClick={ () => confirmRide(driver.id) }>Escolher</button>
                   </li>
                 );
               })
