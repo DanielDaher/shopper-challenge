@@ -9,13 +9,28 @@ function RideSolicitation() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   if (isLoading) {
-    return <div>Carregando...</div>;
+    return (
+      <div
+        className="flex items-center justify-center h-screen"
+        >
+          Carregando...
+      </div>
+    );
   }
+
   return (
-    <div>
-      { !estimatedRide && <Form setEstimatedRide={setEstimatedRide} setIsLoading={setIsLoading}/>}
-      { estimatedRide && <AvailableDrivers drivers={estimatedRide.options} />}
-      { estimatedRide && <GoogleMap estimatedRide={estimatedRide} />}
+    <div className="p-4">
+      {!estimatedRide && <Form setEstimatedRide={setEstimatedRide} setIsLoading={setIsLoading} />}
+      {estimatedRide && (
+        <div className={"grid md:grid-cols-[4fr_6fr]"}>
+          <div>
+            <AvailableDrivers drivers={estimatedRide.options} />
+          </div>
+          <div>
+            <GoogleMap estimatedRide={estimatedRide} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

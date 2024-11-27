@@ -12,7 +12,7 @@ const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers }) => {
   const valueClasses = "text-gray-900 mt-2 font-semibold";
   const titleClasses = "text-xl font-semibold text-gray-900";
   const headerClasses = "text-3xl font-semibold text-gray-800 mb-6";
-  const containerClasses = "p-6 bg-white rounded-lg shadow-md max-w-4xl mx-auto";
+  const containerClasses = "p-6 px-20 ml-5 text-center bg-white rounded-lg shadow-md max-w-4xl mx-auto";
   const itemClasses = "p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200";
 
   const showDriverInfo = (

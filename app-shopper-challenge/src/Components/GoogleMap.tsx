@@ -24,11 +24,11 @@ const GoogleMap: React.FC<FormProps> = (props) => {
   }, [apiKey]);
 
   if (!estimatedRide) return (
-    <p>Loading...</p>
+    <p>Carregando...</p>
   );
 
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div className="h-[60vh] max-w-[90%] md:max-w-[75%] lg:max-w-[90%] mx-auto">
       { apiKey && <APIProvider apiKey={apiKey}>
         <Directions estimatedRide={estimatedRide} />
         <Map
