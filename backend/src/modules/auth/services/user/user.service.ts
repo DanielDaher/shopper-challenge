@@ -37,17 +37,17 @@ class Service {
 
   private checkIfUserIsActive(user: User) {
     if (user.status === AccountStatus.inativo) {
-      throw new AppException(403, ErrorMessages.INACTIVE);
+      throw new AppException(403, 'INACTIVE', ErrorMessages.INACTIVE);
     }
     if (user.status === AccountStatus.pendente) {
-      throw new AppException(403, ErrorMessages.PENDING);
+      throw new AppException(403, 'PENDING', ErrorMessages.PENDING);
     }
   }
 
   private comparePasswords(password: string, hash: string) {
     const isMatch = PasswordHelper.comparePasswordAndHash(password, hash);
     if (!isMatch) {
-      throw new AppException(400, ErrorMessages.INVALID_CREDENTIALS);
+      throw new AppException(400, 'INVALID_CREDENTIALS', ErrorMessages.INVALID_CREDENTIALS);
     }
   }
 
@@ -55,7 +55,7 @@ class Service {
     const user = await Repository.findByCredential(credential);
 
     if (!user) {
-      throw new AppException(400, ErrorMessages.INVALID_CREDENTIALS);
+      throw new AppException(400, 'INVALID_CREDENTIALS', ErrorMessages.INVALID_CREDENTIALS);
     }
     return user;
   }

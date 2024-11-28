@@ -13,7 +13,7 @@ export function Authentication() {
       Passport.authenticate('jwt', { session: false, failWithError: true },
         (err: any, payload: IPayloadDto) => {
           if (err) throw new Error(err);
-          if (!payload) throw new AppException(401, ErrorMessages.UNATHORIZED);
+          if (!payload) throw new AppException(401, 'UNAUTHORIZED', ErrorMessages.UNATHORIZED);
 
           req.auth = payload;
         },

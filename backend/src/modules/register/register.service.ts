@@ -29,7 +29,7 @@ class Service {
     const register = await Repository.findOne(id);
 
     if (!register) {
-      throw new AppException(404, ErrorMessages.USER_NOT_FOUND);
+      throw new AppException(404, 'USER_NOT_FOUND', ErrorMessages.USER_NOT_FOUND);
     }
     return register;
   }
@@ -85,7 +85,7 @@ class Service {
     const user = await userRepository.findByCredential(credential);
 
     if (user) {
-      throw new AppException(400, ErrorMessages.ACCOUNT_ALREADY_EXISTS);
+      throw new AppException(400, 'ACCOUNT_EXISTS', ErrorMessages.ACCOUNT_ALREADY_EXISTS);
     }
   }
 }

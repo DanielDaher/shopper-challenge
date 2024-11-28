@@ -1,11 +1,14 @@
+/* eslint-disable camelcase */
 class AppException extends Error {
   public status;
-  public message;
+  public error_code;
+  public error_description;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, code: string, message: string) {
     super(message);
     this.status = status;
-    this.message = message;
+    this.error_code = code;
+    this.error_description = message;
   }
 }
 

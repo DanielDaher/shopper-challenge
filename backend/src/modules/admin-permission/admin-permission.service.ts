@@ -12,7 +12,7 @@ class Service {
     const permission = await Repository.findById(id);
 
     if (!permission) {
-      throw new AppException(404, ErrorMessages.PERMISSION_NOT_FOUND);
+      throw new AppException(404, 'sem permissão', ErrorMessages.PERMISSION_NOT_FOUND);
     }
     return permission;
   }
