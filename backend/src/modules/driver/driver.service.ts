@@ -7,6 +7,7 @@ import PaginationHelper from '@helpers/pagination.helper';
 
 import { CreateDriverDto } from './dtos/create-driver.dto';
 import { UpdateDriverDto } from './dtos/update-driver.dto';
+import ErrorCode from '@errors/error-code';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -19,11 +20,12 @@ class Service {
     return await Repository.findAllNoPagination(search);
   }
 
-  public async findOne(id: number) {
+  public async findOne(id: number, invalidDriverError?: boolean) {
     const driver = await Repository.findOne(id);
 
     if (!driver) {
-      throw new AppException(404, ErrorMessages.INVALID_DRIVER);
+      if (invalidDriverError) throw new AppException(404, ErrorCode.INVALID_DRIVER, ErrorMessages.INVALID_DRIVER);
+      throw new AppException(404, ErrorCode.DRIVER_NOT_FOUND, ErrorMessages.INVALID_DRIVER);
     }
     return driver;
   }

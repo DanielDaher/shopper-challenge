@@ -16,6 +16,7 @@ import driverRepository from '@modules/driver/driver.repository';
 import { AvailableDriverDtoType } from '@modules/driver/dtos/available-driver.dto';
 import { ComputeRouteResponse } from 'integrations/google-api-routes/compute-routes-response.interface';
 import { Coordinates } from 'integrations/google-api-routes/get-coordinates-response.interface';
+import ErrorCode from '@errors/error-code';
 
 class Service {
   public async findAll(size: number, page: number, search?: string) {
@@ -32,23 +33,28 @@ class Service {
     const ride = await Repository.findOne(id);
 
     if (!ride) {
-      throw new AppException(404, ErrorMessages.RIDE_NOT_FOUND);
+      throw new AppException(404, ErrorCode.NO_RIDES_FOUND, ErrorMessages.RIDE_NOT_FOUND);
     }
     return ride;
   }
 
   public async findRidesByCustomer(customerId: number, driverId?: number) {
     if (driverId) {
-      await driverService.findOne(driverId);
+      await driverService.findOne(driverId, true);
     }
 
     const rides = await Repository.findRidesByCustomer(customerId, driverId);
 
     if (!rides || !rides.length) {
-      throw new AppException(404, ErrorMessages.NO_RIDES_FOUND);
+      throw new AppException(404, ErrorCode.NO_RIDES_FOUND, ErrorMessages.NO_RIDES_FOUND);
     }
+
+    const formattedRides = rides.map(({ createdAt, ...ride }) => ({
+      ...ride,
+      date: createdAt,
+    }));
     // eslint-disable-next-line camelcase
-    return { customer_id: customerId, rides };
+    return { customer_id: customerId, rides: formattedRides };
   }
 
   public async estimateRide(data: EstimateRideDto) {
@@ -150,7 +156,7 @@ class Service {
 
   public validateDriverMinDistance(driverMinDistance: number, rideDistance: number) {
     if (driverMinDistance > rideDistance) {
-      throw new AppException(406, ErrorMessages.INVALID_DISTANCE_DRIVER);
+      throw new AppException(406, ErrorCode.INVALID_DISTANCE, ErrorMessages.INVALID_DISTANCE_DRIVER);
     }
   }
 

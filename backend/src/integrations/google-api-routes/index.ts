@@ -9,7 +9,7 @@ class GoogleApiRoutesIndex {
   public async computeRoutes(data: RouteRequest): Promise<ComputeRouteResponse> {
     const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
-    if (!GOOGLE_API_KEY) throw new AppException(400, errorMessages.FORBIDDEN);
+    if (!GOOGLE_API_KEY) throw new AppException(400, 'forbidden', errorMessages.FORBIDDEN);
 
     const options = {
       method: 'POST',
@@ -30,7 +30,7 @@ class GoogleApiRoutesIndex {
     } catch (error: any) {
       console.log('data: ', data);
       console.error(error.response.data);
-      throw new AppException(400, errorMessages.INTEGRATION_ERROR);
+      throw new AppException(400, 'Erro na integração', errorMessages.INTEGRATION_ERROR);
     }
   }
 
@@ -49,7 +49,7 @@ class GoogleApiRoutesIndex {
       return { lat, lng };
     } catch (error) {
       console.error('Erro ao buscar coordenadas:', error);
-      throw new AppException(400, errorMessages.INTEGRATION_ERROR);
+      throw new AppException(400, 'Erro na integração', errorMessages.INTEGRATION_ERROR);
     }
   }
 }

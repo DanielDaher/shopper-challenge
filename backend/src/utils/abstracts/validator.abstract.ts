@@ -3,13 +3,16 @@ import { RequestPropertyType } from '@customTypes/request.type';
 import { z } from 'zod';
 
 import AppException from '@errors/app-exception';
-import { RequestPath } from '@dtos/request-path.dto';
+import { CustomerRequestPath, RequestPath } from '@dtos/request-path.dto';
 import { RequestQuery } from '@dtos/request-query.dto';
 import { UpdateStatus } from '@dtos/update-status.dto';
+import ErrorCode from '@errors/error-code';
+import { fromError } from 'zod-validation-error';
 
 abstract class BaseValidator {
   constructor(
     protected readonly pathSchema = RequestPath,
+    protected readonly customerPathSchema = CustomerRequestPath,
     protected readonly querySchema = RequestQuery,
     protected readonly updateStatusSchema = UpdateStatus,
   ) {}
@@ -24,13 +27,18 @@ abstract class BaseValidator {
       next();
 
     } catch (err: any) {
-      next(new AppException(400, err.issues));
+      const errors = fromError(err);
+      next(new AppException(400, ErrorCode.INVALID_DATA, errors.message));
 
     }
   }
 
   public pathParams: RequestHandler = (req, res, next) => {
     this.validateSchema(req, next, 'params', this.pathSchema);
+  };
+
+  public customerPathParams: RequestHandler = (req, res, next) => {
+    this.validateSchema(req, next, 'params', this.customerPathSchema);
   };
 
   public queryParams: RequestHandler = (req, res, next) => {
