@@ -15,10 +15,10 @@ export function Authorization(permission: Permissions) {
 
         // if check passes, then verify if admin has permission to access this module.
         const permissions = await AdminPermissionsService.findAllPermissions(req.auth.id);
-        if (!permissions) throw new AppException(403, ErrorMessages.FORBIDDEN);
+        if (!permissions) throw new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN);
 
         const hasPermission = permissions.some(elem => elem.title === permission);
-        if (!hasPermission) throw new AppException(403, ErrorMessages.FORBIDDEN);
+        if (!hasPermission) throw new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN);
       }
 
       await originalMethod.call(this, req, res, next);

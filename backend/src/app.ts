@@ -5,7 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import helmet from 'helmet';
-import multer from 'multer';
+// import multer from 'multer';
 
 import swaggerUI from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -46,15 +46,12 @@ class App {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
       if (err instanceof AppException) {
-        res.status(err.status).json({ error: err.message });
-
-      } else if (err instanceof multer.MulterError) {
-        res.status(400).json({ error: err.message });
-
+        console.error(err);
+        // eslint-disable-next-line camelcase
+        res.status(err.status).json({ error_code: err.error_code, error_description: err.error_description });
       } else {
         console.error(err);
         res.status(500).json({ error: ErrorMessages.INTERNAL_SERVER_ERROR });
-
       }
     });
   }

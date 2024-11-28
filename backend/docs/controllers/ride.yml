@@ -1,0 +1,194 @@
+paths:
+  /ride/estimate:
+    post:
+      summary: 'Rota utilizada para calcular uma corrida'
+      tags:
+        - Gerencial - Corridas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstimateRideSchema'
+      responses:
+        '201':
+          description: 'Created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+  
+  /ride/confirm:
+    patch:
+      summary: 'Rota utilizada para cadastrar uma corrida'
+      tags:
+        - Gerencial - Corridas
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmRideSchema'
+      responses:
+        '200':
+          description: 'Operação realizada com sucesso'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+
+  /ride/{customer_id}:
+    parameters:
+      - $ref: '#/components/parameters/CustomerIdParameter'
+      - $ref: '#/components/parameters/DriverIdParameter'
+    get:
+      summary: 'Rota utilizada para exibir uma corrida'
+      tags:
+        - Gerencial - Corridas
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+
+    put:
+      summary: 'Rota utilizada para editar uma corrida'
+      description: >
+        ## - Não há necessidade de enviar todos os campos novamente. Só precisa enviar aqueles que deseja editar.
+      tags:
+        - Gerencial - Corridas
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RideSchema'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+
+    delete:
+      summary: 'Rota utilizada para deletar uma corrida'
+      tags:
+        - Gerencial - Corridas
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+  
+  /ride:
+    get:
+      summary: 'Rota utilizada para listar as corridas'
+      description: >
+        ## Como funciona a paginação nessa rota?
+
+        ### - Caso não sejam informados valores para 'page' e 'size', o retorno da API será um array com todos os registros de corridas.
+
+        ### - Caso sejam informados valores para 'page' e 'size', o retorno será semelhante ao response abaixo.
+      tags:
+        - Gerencial - Corridas
+        - User - Corridas
+      parameters:
+        - $ref: '#/components/parameters/SearchParameter'
+        - $ref: '#/components/parameters/PageParameter'
+        - $ref: '#/components/parameters/SizeParameter'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/RideSchema'
+                  - $ref: '#/components/schemas/PaginationSchema'
+
+    post:
+      summary: 'Rota utilizada para cadastrar uma corrida'
+      tags:
+        - Gerencial - Corridas
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RideSchema'
+      responses:
+        '201':
+          description: 'Created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+
+  /ride/{id}:
+    parameters:
+      - $ref: '#/components/parameters/IdParameter'
+    get:
+      summary: 'Rota utilizada para exibir uma corrida'
+      tags:
+        - Gerencial - Corridas
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+
+    put:
+      summary: 'Rota utilizada para editar uma corrida'
+      description: >
+        ## - Não há necessidade de enviar todos os campos novamente. Só precisa enviar aqueles que deseja editar.
+      tags:
+        - Gerencial - Corridas
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RideSchema'
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'
+
+    delete:
+      summary: 'Rota utilizada para deletar uma corrida'
+      tags:
+        - Gerencial - Corridas
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RideSchema'

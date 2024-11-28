@@ -26,7 +26,7 @@ class Service {
     const admin = await Repository.findOne(id);
 
     if (!admin) {
-      throw new AppException(404, ErrorMessages.ADMIN_NOT_FOUND);
+      throw new AppException(404, 'ADMIN NOT FOUND', ErrorMessages.ADMIN_NOT_FOUND);
     }
     return admin;
   }
@@ -83,14 +83,14 @@ class Service {
   private async checkUniqueFields(email: string) {
     const account = await Repository.findByUniqueFields(email);
     if (account) {
-      throw new AppException(409, ErrorMessages.ACCOUNT_ALREADY_EXISTS);
+      throw new AppException(409, 'ACCOUNT_EXISTS', ErrorMessages.ACCOUNT_ALREADY_EXISTS);
     }
   }
 
   private async checkUniqueFieldsExcludingMyself(id: number, email: string) {
     const account = await Repository.findByUniqueFields(email);
     if (account && account.id !== id) {
-      throw new AppException(409, ErrorMessages.ACCOUNT_ALREADY_EXISTS);
+      throw new AppException(409, 'ACCOUNT_EXISTS', ErrorMessages.ACCOUNT_ALREADY_EXISTS);
     }
   }
 }

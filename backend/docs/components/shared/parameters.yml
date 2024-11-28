@@ -1,6 +1,22 @@
 components:
   # Reusable path, query, header and cookie parameters
   parameters:
+    CustomerIdParameter:
+      in: path
+      name: customer_id
+      required: true
+      schema:
+        type: number
+        example: 1
+
+    DriverIdParameter:
+      in: path
+      name: driver_id
+      required: false
+      schema:
+        type: number
+        example: 1
+    
     IdParameter:
       in: path
       name: id

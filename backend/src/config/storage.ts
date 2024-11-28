@@ -31,6 +31,6 @@ export default {
     if (ALLOWED_MIMES.includes(file.mimetype)) {
       return callback(null, true);
     }
-    return callback(new AppException(415, 'Tipo de arquivo não suportado.'));
+    return callback(new AppException(415, 'arquivo inválido', 'Tipo de arquivo não suportado.'));
   },
 };

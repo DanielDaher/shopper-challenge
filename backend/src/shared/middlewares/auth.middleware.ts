@@ -12,7 +12,7 @@ class AuthMiddleware {
     Passport.authenticate('jwt', { session: false, failWithError: true },
       (err: any, payload: IPayloadDto) => {
         if (err) return next(err);
-        if (!payload) return next(new AppException(401, ErrorMessages.UNATHORIZED));
+        if (!payload) return next(new AppException(401, 'UNAUTHORIZED', ErrorMessages.UNATHORIZED));
 
         req.auth = payload;
         next();
@@ -27,7 +27,7 @@ class AuthMiddleware {
         else next();
 
       } catch (err: any) {
-        next(new AppException(403, ErrorMessages.FORBIDDEN));
+        next(new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN));
 
       }
     };
@@ -48,7 +48,7 @@ class AuthMiddleware {
         next();
 
       } catch (err: any) {
-        next(new AppException(403, ErrorMessages.FORBIDDEN));
+        next(new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN));
 
       }
     };
@@ -61,11 +61,11 @@ class AuthMiddleware {
       if (auth.role === 'admin' || auth.id === userId) {
         return isValid;
       }
-      throw new AppException(403, ErrorMessages.FORBIDDEN);
+      throw new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN);
 
     } catch (error) {
       console.error(error);
-      throw new AppException(403, ErrorMessages.FORBIDDEN);
+      throw new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN);
     }
   }
 
@@ -78,11 +78,11 @@ class AuthMiddleware {
       if (auth.role === 'admin' || auth.id === currentUserId) {
         return next();
       }
-      return next(new AppException(403, ErrorMessages.FORBIDDEN));
+      return next(new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN));
 
     } catch (error) {
       console.error(error);
-      next(new AppException(403, ErrorMessages.FORBIDDEN));
+      next(new AppException(403, 'FORBIDDEN', ErrorMessages.FORBIDDEN));
     }
   }
 }

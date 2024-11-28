@@ -48,6 +48,7 @@ model User {
   codeExpiresIn DateTime?     @db.DateTime(0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  reviews       Review[]
 }
 
 model Driver {
@@ -56,15 +57,42 @@ model Driver {
   name          String        @db.VarChar(512)
   status        AccountStatus @default(ativo)
   description   String        @db.VarChar(512)
-  car           String        @db.VarChar(512)
-  review        String        @db.VarChar(512)
-  minKm         Int           @default(1)
-  tax           Float
+  vehicle       String        @db.VarChar(512)
+  minDistanceInMeters         Int           @default(1000)
+  value         Float
   imageUrl      String?       @db.Text
   code          String?       @db.VarChar(32)
   codeExpiresIn DateTime?     @db.DateTime(0)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
+  rides         Ride[]
+  reviews       Review[]
+}
+
+model Review {
+  id         Int           @id @default(autoincrement())
+  driverId   Int
+  customerId Int
+  rating     Float         @default(5.0)
+  comment    String        @db.VarChar(512)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+  driver     Driver        @relation(fields: [driverId], references: [id])
+  customer   User          @relation(fields: [customerId], references: [id])
+}
+
+model Ride {
+  id            Int           @id @default(autoincrement())
+  customerId    Int
+  driverId      Int
+  origin        String        @db.VarChar(512)
+  destination   String        @db.VarChar(512)
+  distance      Int
+  duration      String        @db.VarChar(512)
+  value         Float         @default(0.00)
+  driver        Driver        @relation(fields: [driverId], references: [id])
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
 }
 
 enum Permissions {

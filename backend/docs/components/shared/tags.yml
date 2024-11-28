@@ -5,6 +5,8 @@ tags:
   - name: Gerencial - Autenticação
   - name: Gerencial - Cadastro
   - name: Gerencial - Colaboradores
+  - name: Gerencial - Corridas
   - name: ---
   - name: User - Autenticação
   - name: User - Cadastro
+  - name: User - Corridas
