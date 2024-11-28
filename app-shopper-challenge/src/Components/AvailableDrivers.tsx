@@ -1,5 +1,6 @@
 import React from 'react';
 import { EstimateRide } from '../interfaces/estimate.ride.interface';
+import AvailableDriversStyles from '../TailwindStyles/Available.drivers';
 
 interface AvailableDriversProps {
   drivers: EstimateRide["options"];
@@ -7,14 +8,7 @@ interface AvailableDriversProps {
 }
 
 const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers, setDriverId }) => {
-  const listClasses = "space-y-4";
-  const textClasses = "text-gray-600 mt-2";
-  const noDriversClasses = "text-gray-500";
-  const valueClasses = "text-gray-900 mt-2 font-semibold";
-  const titleClasses = "text-xl font-semibold text-gray-900";
-  const headerClasses = "text-3xl font-semibold text-gray-800 mb-6";
-  const containerClasses = "p-6 px-20 ml-5 text-center bg-white rounded-lg shadow-md max-w-4xl mx-auto";
-  const itemClasses = "p-4 bg-gray-50 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200";
+  const { listClasses, textClasses, noDriversClasses, valueClasses, titleClasses, headerClasses, containerClasses, itemClasses, submitButton  } = AvailableDriversStyles
 
   const confirmRide = (driverId: number) => {
     setDriverId(driverId);
@@ -60,7 +54,12 @@ const AvailableDrivers: React.FC<AvailableDriversProps> = ({ drivers, setDriverI
                     {
                       driverDetails.map((detail, idx) => showDriverInfo(idx, detail.label, detail.value, detail.isValueField))
                     }
-                    <button onClick={ () => confirmRide(driver.id) }>Escolher</button>
+                    <button
+                      onClick={ () => confirmRide(driver.id) }
+                      className={submitButton}
+                      >
+                        Escolher
+                    </button>
                   </li>
                 );
               })

@@ -53,7 +53,7 @@ const Directions: React.FC<FormProps> = (props) => {
 
   return (
     <div>
-      <h2>Rota da viagem:</h2>
+      <h2 className="text-gray-500 font-semibold">Rota da viagem:</h2>
     </div>
   );
 }

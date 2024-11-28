@@ -3,6 +3,7 @@ import api from '../API';
 import React from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import FormStyles from '../TailwindStyles/Form.styles';
 
 const formSchema = z.object({
   customerId: z.string().min(1, 'O ID do usuário é obrigatório'),
@@ -50,26 +51,52 @@ const Form: React.FC<FormProps> = (props) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submitForm)} style={{ maxWidth: 400, margin: '0 auto' }}>
-      <div>
-        <label>Id do cliente:</label>
-        <input type="text" {...register('customerId')} />
-        {errors.customerId && <p style={{ color: 'red' }}>{errors.customerId.message}</p>}
+    <form 
+      onSubmit={handleSubmit(submitForm)} 
+      className={FormStyles.formContainer}
+    >
+      <h1 className={FormStyles.formTitle}>Solicitação de Corrida</h1>
+      
+      <div className={FormStyles.inputContainer}>
+        <label className={FormStyles.label}>Id do cliente:</label>
+        <input 
+          type="text" 
+          {...register('customerId')} 
+          className={`${FormStyles.input} ${
+            errors.customerId ? FormStyles.inputError : FormStyles.inputDefault
+          }`}
+        />
+        {errors.customerId && <p className={FormStyles.errorText}>{errors.customerId.message}</p>}
       </div>
 
-      <div>
-        <label>origin:</label>
-        <input type="text" {...register('origin')} />
-        {errors.origin && <p style={{ color: 'red' }}>{errors.origin.message}</p>}
+      <div className={FormStyles.inputContainer}>
+        <label className={FormStyles.label}>Origem:</label>
+        <input 
+          type="text" 
+          {...register('origin')} 
+          className={`${FormStyles.input} ${
+            errors.origin ? FormStyles.inputError : FormStyles.inputDefault
+          }`}
+        />
+        {errors.origin && <p className={FormStyles.errorText}>{errors.origin.message}</p>}
       </div>
 
-      <div>
-        <label>destination:</label>
-        <input type="text" {...register('destination')} />
-        {errors.destination && <p style={{ color: 'red' }}>{errors.destination.message}</p>}
+      <div className={FormStyles.inputContainer}>
+        <label className={FormStyles.label}>Destino:</label>
+        <input 
+          type="text" 
+          {...register('destination')} 
+          className={`${FormStyles.input} ${
+            errors.destination ? FormStyles.inputError : FormStyles.inputDefault
+          }`}
+        />
+        {errors.destination && <p className={FormStyles.errorText}>{errors.destination.message}</p>}
       </div>
 
-      <button type="submit" style={{ marginTop: 20 }}>
+      <button 
+        type="submit" 
+        className={FormStyles.submitButton}
+      >
         Enviar
       </button>
     </form>
