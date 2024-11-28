@@ -12,7 +12,7 @@ components:
     DriverIdParameter:
       in: path
       name: driver_id
-      required: true
+      required: false
       schema:
         type: number
         example: 1
