@@ -2,12 +2,14 @@ interface NavButtonProps {
   active: boolean;
   currentChoice: string;
   text: string;
+  setRedirect: (value: boolean) => void;
   setCurrentChoice: (value: string) => void;
 }
 
 function NavButton({
   text,
   active,
+  setRedirect,
   currentChoice,
   setCurrentChoice,
 }: NavButtonProps) {
@@ -15,7 +17,10 @@ function NavButton({
   const updateStateHeader = (titleContent: string) => {
     const cleanChoices = '';
 
-    if (titleContent === currentChoice) return setCurrentChoice(cleanChoices);
+    setRedirect(true);
+    if (titleContent === currentChoice) {
+      return setCurrentChoice(cleanChoices);
+    }
     return setCurrentChoice(titleContent);
   };
 

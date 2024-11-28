@@ -8,6 +8,7 @@ import { EstimateRide } from "../../interfaces/estimate.ride.interface";
 
 function RideSolicitation() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [redirect, setRedirect] = useState<boolean>(false);
   const [driverId, setDriverId] = useState<number | null>(null);
   const [customerId, setCustomerId] = useState<number | null>(null);
   const [originAddress, setOriginAddress] = useState<string | null>(null);
@@ -15,6 +16,13 @@ function RideSolicitation() {
   const [destinationnAddress, setDestinationAddress] = useState<string | null>(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (redirect) {
+      navigate('/history');
+    }
+  }, [navigate, redirect]);
+  
 
   useEffect(() => {
     console.log('all states: ', {
@@ -43,12 +51,12 @@ function RideSolicitation() {
       const sucessfulResponse = 201;
   
       if (response.status === sucessfulResponse) {
-        navigate('/history-rides'); 
+        setRedirect(true);
       }
     }
 
     confirmRide();
-  }, [customerId, driverId, estimatedRide, originAddress, destinationnAddress, navigate]);
+  }, [customerId, driverId, estimatedRide, originAddress, destinationnAddress]);
 
   if (isLoading) {
     return (

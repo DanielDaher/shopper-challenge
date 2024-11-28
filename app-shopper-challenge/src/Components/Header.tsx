@@ -4,10 +4,13 @@ import React, { useEffect, useState } from 'react';
 
 const Header: React.FC = () => {
   const [currentChoice, setCurrentChoice] = useState<string>('');
+  const [redirect, setRedirect] = useState<boolean>(false);
   const [pageTitle] = useState<string[]>(['Solicitar viagem', 'Histórico'])
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!redirect) return;
+
     const rideSolicitation = 'Solicitar';
     const ridesHistory = 'Histórico';
 
@@ -18,15 +21,17 @@ const Header: React.FC = () => {
 
 
     if (currentChoice.includes(rideSolicitation)) {
+      setRedirect(false);
       navigate('/ride-solicitation');
       return;
     }
 
     if (currentChoice.includes(ridesHistory)) {
-      navigate('/history-rides');
+      setRedirect(false);
+      navigate('/history');
       return;
     }
-  }, [currentChoice, navigate])
+  }, [currentChoice, navigate, redirect])
 
   return (
     <div className="flex-col space-x-2 justify-center my-10 space-y-3">
@@ -36,6 +41,7 @@ const Header: React.FC = () => {
           key={index}
           currentChoice={currentChoice}
           setCurrentChoice={setCurrentChoice}
+          setRedirect={setRedirect}
           active={currentChoice === title}
           text={title}
           />
